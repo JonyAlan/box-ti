@@ -1,44 +1,25 @@
 <template>
-  <div class="container align-center">
-
-    <b-modal id="modal-user"  >
-      <template >
-        <b-card 
-        :img-src="userDate.avatar_url"
-        img-alt="Image"
-        img-top
-        tag="article"
-        style="max-width: 10rem,"
-        class="mb-2"
-      >
-      </b-card>
-      </template>
-      <div class="d-block text-center">
-        <h5 v-if="userDate.name">Nome: <h6>{{userDate.name}}</h6></h5>
-        <h5 v-if="userDate.login">Login: {{userDate.login}}</h5>
-        <h5 v-if="userDate.bio">Bio: {{userDate.bio}}</h5>
-        <h5 v-if="userDate.followers">Seguidores: {{userDate.followers}}</h5>
-      </div> 
-    </b-modal>
-
-
+  <div class="container align-center"> 
     <div class="row justify-content-center align-items-center">
       <b-card
-        title="Busca de perfis"
+        title="Busca de perfis Github"
         img-src="https://boxti.com.br/wp-content/uploads/2020/12/imagem-hero.png"
         img-alt="Image"
         img-top
         tag="article"
         style="max-width: 20rem"
-        class="mb-2"
+        class="my-2"
       >
         <b-form-input
           class="my-3"
           sm="3"
           v-model="username"
-          placeholder="Digite o nome"
+          placeholder="Digite o nome do usuário"
         ></b-form-input>
-        <b-button @click="changeUser()" variant="primary">Buscar</b-button>
+        <b-button @click="changeUser()" :disabled="loading" class="primary">
+          <div v-if="loading" class="lds-dual-ring"></div>
+          <font v-else>Buscar</font>
+        </b-button>
       </b-card>
     </div>
   </div>
@@ -47,6 +28,7 @@
 <script>
 import UserService from "../services/user.services";
 import Swal from "sweetalert2";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -56,26 +38,29 @@ export default {
     return {
       title: "Home",
       username: "",
-      userDate: [],
+      loading: false, 
     };
   },
   mounted() {
-    this.username = "";
+    this.username = ""; 
   },
   methods: {
+    ...mapActions(["setUser"]),
     changeUser() {
-      var self = this
-
+      this.loading = true;
       UserService.getUser(this.username).then(
         (response) => {
-          let resp = response.data;
+          let resp = response.data; 
 
-          self.userDate = resp
-          this.$bvModal.show('modal-user')
+          setTimeout(() => {
+            this.loading = false; 
+            this.setUser(resp);
+            this.$router.push('/detail')
+          }, 1000);
   
         },
-        (error) => {
-          console.log("🚀 ~ error", error);
+        () => {
+          this.loading = false;
           Swal.fire({
             icon: "info",
             title: "",
@@ -84,37 +69,33 @@ export default {
         }
       );
     },
-    detailUser() {
-      var self = this
-
-      UserService.getUserDetal(this.username).then(
-        (response) => {
-          let resp = response.data;
-
-          self.userDate = resp
-          this.$bvModal.show('modal-user')
   
-        },
-        (error) => {
-          console.log("🚀 ~ error", error);
-          Swal.fire({
-            icon: "info",
-            title: "",
-            text: "Nenhum usuário encontrado",
-          });
-        }
-      );
-    },
   },
 };
 </script>
 
-<style scoped>
-  .avatar-wrapper {
-    height: 62px;
-    width: 62px;
+<style scoped> 
+  .lds-dual-ring {  
+    display: flex; 
+    justify-content: center;  
   }
-  .form {
-    width: 50%;
+  .lds-dual-ring:after {
+    content: " ";
+    display: flex; 
+    width: 22px;
+    height: 24px; 
+    border-radius: 50%; 
+    border: 3px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
   }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
 </style>
