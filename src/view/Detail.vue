@@ -36,8 +36,7 @@ export default {
     };
   },
   mounted() { 
-    this.user = this.$store.getters['getUser']; 
-    console.log("🚀 ~ file: Detail.vue ~ line 52 ~ mounted ~ this.user", this.user)
+    this.user = this.$store.getters['getUser'];  
   },
   methods: {
     ...mapActions(["resetUser"]),
