@@ -22,7 +22,7 @@ export default {
  
     text-align: center;
     color: #2c3e50;
-    padding-top:  150px;
+    padding-top:  80px;
   } 
   .primary {
     background-color: #1F2741;

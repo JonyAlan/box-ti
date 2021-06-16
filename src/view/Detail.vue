@@ -1,18 +1,23 @@
 <template>
-  <div class="container align-center"> 
-    <b-card bg-variant="Light" text-variant="white" title="Card Title">
-      <b-card-text class="text-black">
-        With supporting text below as a natural lead-in to additional content.
-      </b-card-text>
+  <div class="container"> 
+    <b-card class="mb-4" bg-variant="Light" text-variant="white">
 
+      <div class="row flex px-3 d-flex justify-content-end">
+        <div class="mb-3">  
+          <b-avatar rounded :src="user.avatar_url" size="8rem"></b-avatar>
+        </div>
+      </div>
+        <h5 class="text-black text-left mb-3 ml-2">
+          Seja bem vindo, aqui você pode conferir um pouco mais sobre <font class="text-danger">{{user.login}}</font>.
+        </h5> 
+ 
       <colapses :info="user"></colapses>
  
       <b-button @click="goHome()" :disabled="loading" class="primary mt-3"> 
         <font>voltar</font>
       </b-button> 
 
-    </b-card>
- 
+    </b-card> 
   </div>
 </template>
 
