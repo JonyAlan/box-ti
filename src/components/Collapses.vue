@@ -1,5 +1,5 @@
 <template>
-    <div class="card p-3  text-black text-left">
+    <div class="card p-3 mb-5 text-black text-left">
       <h6>Nome: {{info.name || 'Não informado'}}</h6>
       <h6>Bio:  {{info.bio || 'Não informado'}}</h6>
       <h6>Repositórios públicos: {{info.public_repos || 'Não informado'}}</h6>
